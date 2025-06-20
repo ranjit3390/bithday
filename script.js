@@ -1,44 +1,44 @@
-function showWish () {
-    const box = document.getElementById('wishbox');
-    box.classList.remove('hidden');
-}
+function showConfetti() { 
 
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-const confettiCount = 150;
-const confettis = [];
-
-for (let i = 0; i < confettiCount; i++) {
-    confettis.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 6 + 2,
-        d: Math.random() * 50,
-        title: Math.floor(Math.random() * 10)-5 
-     });
-}
-
-function drawConfetti() {
-    ctx.clearRect(0,0, canvas.width,canvas.height);
-    confettis.forEach(p => {
-        ctx.beginPath();
-        ctx.fillStyle = p.color;
-        ctx.arc(p.x, p.y, p.r,0,Math.PI *2);
-        ctx.fill();
-        p.y += Math.cos(p.d) + 1;
-        p.x += Math.sin(p.d);
-
-        if (p.y > canvas.height) {
-            p.y = -10;
-            p.x = Math.random() * canvas.width;
-        }
+  const pieces = [];
+  for (let i = 0; i < 100; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 10 + 5,
+      d: Math.random() * 100,
+      color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+      tilt: Math.random() * 10 - 10
     });
+  }
 
-    requestAnimationFrame(drawConfetti);
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    });
+    update();
+  }
+
+  function update() {
+    pieces.forEach(p => {
+      p.y += 2;
+      p.x += Math.sin(p.d);
+      if (p.y > canvas.height) {
+        p.y = 0;
+        p.x = Math.random() * canvas.width;
+      }
+    });
+  }
+
+  setInterval(draw, 30);
 }
-
-drawConfetti();
